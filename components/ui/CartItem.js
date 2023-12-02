@@ -17,9 +17,9 @@ const CarritoItem = ({ product, amount, onIncrement, onDecrement, onDelete }) =>
       </div>
       <p className="mt-2">Precio: ${product.price}</p>
       <div className="flex items-center mt-2">
-        <button onClick={onDecrement} className="px-2 py-1 border rounded">-</button>
+        <button onClick={() => onDecrement(product.slug)} className="px-2 py-1 border rounded">-</button>
         <p className="mx-2">{amount}</p>
-        <button onClick={onIncrement} className="px-2 py-1 border rounded">+</button>
+        <button onClick={() => onIncrement(product.slug)} className="px-2 py-1 border rounded">+</button>
       </div>
     </div>
   );

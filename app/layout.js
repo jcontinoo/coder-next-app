@@ -1,5 +1,6 @@
 import "./globals.css"
 import Header from "@/components/ui/Header"
+import { CartProvider } from "@/contexts/CartContext"
 
 export const metadata = {
   title: 'NBA Store',
@@ -11,8 +12,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Header />
-        {children}
+        <CartProvider>
+          <Header />
+          {children}
+        </CartProvider>
       </body>
     </html>
   )

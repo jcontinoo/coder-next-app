@@ -1,52 +1,27 @@
 "use client"
-import React, { useState } from 'react';
+import React from 'react';
 import CarritoItem from '@/components/ui/CartItem';
-import mockData from '@/data/products';
+import { useCartContext } from '@/contexts/CartContext';
 
 const Carrito = () => {
-  const [productosEnCarrito, setProductosEnCarrito] = useState(
-    mockData.slice(0, 2).map((producto) => ({ ...producto, cantidad: 2 }))
-  );
+  const { cart, removeFromCart, incrementQuantity, decrementQuantity } = useCartContext();
 
-  const handleIncrement = (slug) => {
-    setProductosEnCarrito((prevProductos) =>
-      prevProductos.map((producto) =>
-        producto.slug === slug ? { ...producto, cantidad: producto.cantidad + 1 } : producto
-      )
-    );
-  };
-
-  const handleDecrement = (slug) => {
-    setProductosEnCarrito((prevProductos) =>
-      prevProductos.map((producto) =>
-        producto.slug === slug && producto.cantidad > 1
-          ? { ...producto, cantidad: producto.cantidad - 1 }
-          : producto
-      )
-    );
-  };
-
-  const handleEliminar = (slug) => {
-    setProductosEnCarrito((prevProductos) => prevProductos.filter((producto) => producto.slug !== slug));
-  };
-
-  const subtotal = productosEnCarrito.reduce(
-    (acc, producto) => acc + producto.price * producto.cantidad,
-    0
-  );
+  const subtotal = cart.length > 0
+    ? cart.reduce((acc, product) => acc + (product.price || 0) * (product.quantity || 1), 0)
+    : 0;
   const total = subtotal;
 
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-3xl font-semibold mb-4">Resumen</h2>
-      {productosEnCarrito.map((product) => (
+      {cart.map((product) => (
         <CarritoItem
           key={product.slug}
           product={product}
-          amount={product.cantidad}
-          onIncrement={() => handleIncrement(product.slug)}
-          onDecrement={() => handleDecrement(product.slug)}
-          onEliminar={() => handleEliminar(product.slug)}
+          amount={product.quantity}
+          onIncrement={() => incrementQuantity(product.slug)}
+          onDecrement={() => decrementQuantity(product.slug)}
+          onDelete={() => removeFromCart(product.slug)}
         />
       ))}
       <div className="border-2 border-blue-900 p-4 mt-10">
