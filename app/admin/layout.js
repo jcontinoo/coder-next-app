@@ -2,12 +2,14 @@
 import { useAuthContext } from "@/contexts/AuthContext"
 
 const AdminLayout = ({ children, login }) => {
-    const { user } = useAuthContext()
+    const { userData } = useAuthContext()
+
+    console.log("que rol trae el user? ", userData)
 
     return (
         <>
             {
-                user.logged ? children : login
+                userData.logged && userData.role === 'admin'  ? children : login
             }
         </>
     )
